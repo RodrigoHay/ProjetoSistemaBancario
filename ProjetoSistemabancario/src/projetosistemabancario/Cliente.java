@@ -24,6 +24,7 @@ public class Cliente {
     private int telefone;
     private String emailCliente;
     private String profissao;
+    private int clienteAtivo = 1;
     private String resposta;
     private int respostaConvertidaNumero;
     private int step = 1;
@@ -119,13 +120,12 @@ public class Cliente {
     //Faz a conexão com o banco de dados e envio das informações
     public void CriarClienteBD() throws SQLException {
         ConexaoBD clienteBD = ConexaoBD.getInstancy();
-        clienteBD.alteraBD("INSERT INTO cliente(nome, cartaoCidadao, telefone, email, profissao) VALUES ('"
-                + this.getNomeCliente() + "','" + this.getNumeroCC() + "','" + this.getTelefone() + "','" + this.getEmailCliente() + "','" + this.getProfissao() + "');");
-
-//        testeConexao.getDados();
+        clienteBD.alteraBD("INSERT INTO cliente(nome, cartaoCidadao, telefone, email, profissao, cliente_ativo) VALUES ('"
+                + this.getNomeCliente() + "','" + this.getNumeroCC() + "','" + this.getTelefone() + "','" + this.getEmailCliente() + "','" + this.getProfissao() + "','" + this.getClienteAtivo() + "');");
+        clienteBD.getDados();
     }
 
-    //INSERT INTO country(country_id, country) VALUES(5, 'Brasil')";
+    
     // Getters e Setters #####################################################################################################################################
     public String getNomeCliente() {
         return nomeCliente;
@@ -173,6 +173,10 @@ public class Cliente {
 
     public void setProfissao(String profissao) {
         this.profissao = profissao;
+    }
+
+    public int getClienteAtivo() {
+        return clienteAtivo;
     }
 
 }

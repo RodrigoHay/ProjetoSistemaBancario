@@ -41,27 +41,29 @@ public class ConexaoBD {
 
     
 // Insere/Altera dados no banco de dados
-    public static void alteraBD(String alteraBancoDeDados) throws SQLException { // Altera os dados conforme a string de comando (SELECT * FROM country) por exemplo
+    public void alteraBD(String alteraBancoDeDados) throws SQLException { // Altera os dados conforme a string de comando (SELECT * FROM country) por exemplo
         stmt.executeUpdate(alteraBancoDeDados);
     }
     
     
     //Retorna os dados e insere num ArrayList 
-//    public void getDados() throws SQLException {
-//
-//        ResultSet rs = stmt.executeQuery("SELECT * FROM country");
-//
-//        while (rs.next()) {
-//            
+    public void getDados() throws SQLException {
+
+        ResultSet rs = stmt.executeQuery("SELECT * FROM cliente"); //SELECT @@IDENTITY
+        int ultimoIndex = 0;
+        while (rs.next()) {
+              ultimoIndex = Integer.parseInt(rs.getString("cliente_id"));
+              
 //            bd.add(rs.getString("country_id"));
 //            bd.add(rs.getString("country"));
-//        }
-//    }
-//
-//    //Desponibiliza a arraylist com as informações
-//    public ArrayList<String> getBD() {
-//        return bd;
-//    }
+        }
+        System.out.println("ultimo index" +ultimoIndex);
+        //select * from cliente where cliente_id = (select max(cliente_id) from cliente)
+}       
+    //Desponibiliza a arraylist com as informações
+    public ArrayList<String> getBD() {
+        return bd;
+    }
 
     
     
