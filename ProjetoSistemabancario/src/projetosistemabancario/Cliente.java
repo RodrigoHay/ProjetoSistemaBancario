@@ -4,6 +4,7 @@
  */
 package projetosistemabancario;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 /**
@@ -14,16 +15,16 @@ public class Cliente {
     Scanner stdIn = new Scanner(System.in);
 
     // Dados pessoais dos clientes
-    String nomeCliente;
-    int numeroCC;
-    String moradaCliente;
-    int telefone;
-    String emailCliente;
-    String profissao;
-    String resposta;
-    int respostaConvertidaNumero;
-    int step = 1;
-    boolean cadastroClinteCompleto = false;
+    private String nomeCliente;
+    private int numeroCC;
+    private String moradaCliente;
+    private int telefone;
+    private String emailCliente;
+    private String profissao;
+    private String resposta;
+    private int respostaConvertidaNumero;
+    private int step = 1;
+    private boolean cadastroClinteCompleto = false;
 
     public void CriaCliente() {
 
@@ -96,7 +97,28 @@ public class Cliente {
                 cadastroClinteCompleto = true;
             }
         }
+
+        //Verifica se cadastro foi concluído ou cancelado
+        if (cadastroClinteCompleto == true) {
+            System.out.println("Dados pessoais completos");
+        } else {
+            System.out.println("Cadastro cancelado.");
+        }
     }
+
+    //Faz a conexão com o banco de dados e envio das informações
+   	public static void ClienteTeste() throws SQLException {
+		ConnectionSingleton testeConexao = ConnectionSingleton.getInstancy();
+		
+		testeConexao.alteraBD("DELETE FROM country WHERE country_id= 5");
+		
+		System.out.println("Imprimindo");
+		testeConexao.getDados();
+		System.out.println("Foram impressos");
+		
+	}
+        
+       
 
     // Getters e Setters #####################################################################################################################################
     public String getNomeCliente() {
