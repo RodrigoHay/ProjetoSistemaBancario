@@ -119,8 +119,8 @@ public class Cliente {
     //Faz a conexão com o banco de dados e envio das informações
     public void CriarClienteBD() throws SQLException {
         ConexaoBD clienteBD = ConexaoBD.getInstancy();
-        clienteBD.alteraBD("INSERT INTO cliente(nome, cartaoCidadao, telefone, email, profissão) VALUES ("
-                + this.getNomeCliente() + "," + this.getNumeroCC() + "," + this.getTelefone() + "," + this.getEmailCliente() + "," + this.getProfissao() + ");");
+        clienteBD.alteraBD("INSERT INTO cliente(nome, cartaoCidadao, telefone, email, profissao) VALUES ('"
+                + this.getNomeCliente() + "','" + this.getNumeroCC() + "','" + this.getTelefone() + "','" + this.getEmailCliente() + "','" + this.getProfissao() + "');");
 
 //        testeConexao.getDados();
     }
