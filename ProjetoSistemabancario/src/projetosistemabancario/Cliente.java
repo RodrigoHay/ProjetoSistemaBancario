@@ -5,7 +5,10 @@
 package projetosistemabancario;
 
 import java.sql.SQLException;
+import java.time.Clock;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Rodrigo Hay
@@ -25,6 +28,7 @@ public class Cliente {
     private int respostaConvertidaNumero;
     private int step = 1;
     private boolean cadastroClinteCompleto = false;
+    public String criarClienteComando;
 
     public void CriaCliente() {
 
@@ -101,25 +105,27 @@ public class Cliente {
         //Verifica se cadastro foi concluído ou cancelado
         if (cadastroClinteCompleto == true) {
             System.out.println("Dados pessoais completos");
+            try {
+                CriarClienteBD();
+            } catch (SQLException ex) {
+                System.out.println("Falha ao tentar gravar no banco de dados");
+                System.out.println(ex.getMessage());
+            }
         } else {
             System.out.println("Cadastro cancelado.");
         }
     }
 
     //Faz a conexão com o banco de dados e envio das informações
-   	public static void ClienteTeste() throws SQLException {
-		ConnectionSingleton testeConexao = ConnectionSingleton.getInstancy();
-		
-		testeConexao.alteraBD("DELETE FROM country WHERE country_id= 5");
-		
-		System.out.println("Imprimindo");
-		testeConexao.getDados();
-		System.out.println("Foram impressos");
-		
-	}
-        
-       
+    public void CriarClienteBD() throws SQLException {
+        ConexaoBD clienteBD = ConexaoBD.getInstancy();
+        clienteBD.alteraBD("INSERT INTO cliente(nome, cartaoCidadao, telefone, email, profissão) VALUES ("
+                + this.getNomeCliente() + "," + this.getNumeroCC() + "," + this.getTelefone() + "," + this.getEmailCliente() + "," + this.getProfissao() + ");");
 
+//        testeConexao.getDados();
+    }
+
+    //INSERT INTO country(country_id, country) VALUES(5, 'Brasil')";
     // Getters e Setters #####################################################################################################################################
     public String getNomeCliente() {
         return nomeCliente;
