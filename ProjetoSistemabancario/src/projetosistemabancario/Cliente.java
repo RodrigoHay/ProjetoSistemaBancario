@@ -20,76 +20,82 @@ public class Cliente {
     int telefone;
     String emailCliente;
     String profissao;
-    String respostaTexto;
-    int respostaNumero;
-    int contadorSwitch = 1;
+    String resposta;
+    int respostaConvertidaNumero;
+    int step = 1;
     boolean cadastroClinteCompleto = false;
 
-//    public Cliente(String nomeCliente, int numeroCC, String moradaCliente, int telefone, String emailCliente, String profissao) {
-////        this.nomeCliente = nomeCliente;
-////        this.numeroCC = numeroCC;
-////        this.
-//    }
     public void CriaCliente() {
+
         //Questionário para criação do cliente
-
-        do {
-            switch (contadorSwitch) {
-                case 1: //NOME
-
-                    System.out.println("Digite o NOME DO CLIENTE ou 0 para cancelar:");
-                    respostaTexto = stdIn.nextLine();
-                    if (respostaTexto.equals("0")) {
-                        break;
-                    } else {
-                        setNomeCliente(respostaTexto);
-                    }
-                case 2: //CARTÃO CIDADÃO
-                    System.out.println("Digite o NÚMERO DO CARTÃO CIDADÃO ou 0 para cancelar:");
-                    respostaNumero = stdIn.nextInt();
-                    if (respostaNumero == 0) {
-                        break;
-                    } else {
-                        setNumeroCC(respostaNumero);
-                    }
-                case 3: //TELEFONE
-                    System.out.println("Digite o NÚMERO TELEFÔNICO ou 0 para cancelar:");
-                    respostaNumero = stdIn.nextInt();
-                    if (respostaNumero == 0) {
-                        break;
-                    } else {
-                        setTelefone(respostaNumero);
-                    }
-                case 4://MORADA
-                    System.out.println("Digite a MORADA ou 0 para cancelar:");
-                    respostaTexto = stdIn.nextLine();
-                    if (respostaTexto.equals("0")) {
-                        break;
-                    } else {
-                        setMoradaCliente(respostaTexto);
-                    }
-                case 5: //EMAIL
-                    System.out.println("Digite a E-MAIL ou 0 para cancelar:");
-                    respostaTexto = stdIn.nextLine();
-                    if (respostaTexto.equals("0")) {
-                        break;
-                    } else {
-                        setEmailCliente(respostaTexto);
-                    }
-                case 6: //PROFISSÃO
-                    System.out.println("Digite a PROFISSÃO ou 0 para cancelar:");
-                    respostaTexto = stdIn.nextLine();
-                    if (respostaTexto.equals("0")) {
-                        break;
-                    } else {
-                        setEmailCliente(respostaTexto);
-                        cadastroClinteCompleto = true;
-                    }
-                default:
-                    System.out.println("Operação cancelada.");
+        if (step == 1) //NOME
+        {
+            System.out.println("Digite o NOME DO CLIENTE ou 0 para cancelar:");
+            resposta = stdIn.nextLine();
+            if (resposta.equals("0")) {
+                step = 0;
+            } else {
+                setNomeCliente(resposta);
+                step = 2;
             }
-        } while (!cadastroClinteCompleto);
-
+        }
+        if (step == 2) //CARTÃO CIDADÃO
+        {
+            System.out.println("Digite o CARTÃO CIDADÃO ou 0 para cancelar:");
+            resposta = stdIn.nextLine();
+            if (resposta.equals("0")) {
+                step = 0;
+            } else {
+                respostaConvertidaNumero = Integer.parseInt(resposta);
+                setNumeroCC(respostaConvertidaNumero);
+                step = 3;
+            }
+        }
+        if (step == 3) //TELEFONE
+        {
+            System.out.println("Digite o NÚMERO TELEFÔNICO ou 0 para cancelar:");
+            resposta = stdIn.nextLine();
+            if (resposta.equals("0")) {
+                step = 0;
+            } else {
+                respostaConvertidaNumero = Integer.parseInt(resposta);
+                setTelefone(respostaConvertidaNumero);
+                step = 4;
+            }
+        }
+        if (step == 4) //MORADA
+        {
+            System.out.println("Digite a MORADA ou 0 para cancelar:");
+            resposta = stdIn.nextLine();
+            if (resposta.equals("0")) {
+                step = 0;
+            } else {
+                setMoradaCliente(resposta);
+                step = 5;
+            }
+        }
+        if (step == 5) //E-MAIL
+        {
+            System.out.println("Digite o E-MAIL ou 0 para cancelar:");
+            resposta = stdIn.nextLine();
+            if (resposta.equals("0")) {
+                step = 0;
+            } else {
+                setEmailCliente(resposta);
+                step = 6;
+            }
+        }
+        if (step == 6) //PROFISSÃO
+        {
+            System.out.println("Digite o PROFISSÃO ou 0 para cancelar:");
+            resposta = stdIn.nextLine();
+            if (resposta.equals("0")) {
+                step = 0;
+            } else {
+                setProfissao(resposta);
+                cadastroClinteCompleto = true;
+            }
+        }
     }
 
     // Getters e Setters #####################################################################################################################################
