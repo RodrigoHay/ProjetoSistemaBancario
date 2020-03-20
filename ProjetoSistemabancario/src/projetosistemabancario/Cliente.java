@@ -31,6 +31,7 @@ public class Cliente {
     private boolean cadastroClienteCompleto = false;
     public String criarClienteComando;
     ConexaoBD clienteBD = ConexaoBD.getInstancy(); // Instância do objeto
+    int indexCliente;
 
     public void CriaCliente() {
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -133,11 +134,11 @@ public class Cliente {
 //Conecta ao banco de dados e altera dados do cliente
 
     public void alterarClienteBD() throws SQLException {
-        int index = 0;
+        String mudarDado = "";
         System.out.println("Digite o NOME DO CLIENTE:");
         resposta = stdIn.nextLine();
         if (clienteBD.verificaExistenciaInfo("SELECT * FROM cliente WHERE nome = '" + resposta + "'") == true) {
-            index = clienteBD.getIndex("SELECT * FROM cliente");
+            indexCliente = clienteBD.getIndex("SELECT * FROM cliente");
             //Indica qual informação deseja alterar  
             System.out.println("Qual informação deseja alterar/Corrigir?");
             System.out.println("1 - Nome:");
@@ -150,25 +151,41 @@ public class Cliente {
             switch (resposta) {
                 case "1":
                     System.out.println("Indique o novo Nome:");
+                    resposta = stdIn.nextLine();
+                    mudarDado = "nome";
                     break;
                 case "2":
-                    System.out.println("Indique o novo Número do cartão cidadão:");
+                    System.out.println("Indique o novo Número do Cartão Cidadão:");
+                    resposta = stdIn.nextLine();
+                    mudarDado = "cartaoCidadao";
                     break;
                 case "3":
-                    System.out.println("Indique o novo Morada:");
+                    System.out.println("Indique a nova Morada:");
+                    resposta = stdIn.nextLine();
+                    mudarDado = "morada";
                     break;
                 case "4":
                     System.out.println("Indique o novo Telefone:");
+                    resposta = stdIn.nextLine();
+                    mudarDado = "telefone";
                     break;
                 case "5":
                     System.out.println("Indique o novo E-mail:");
+                    resposta = stdIn.nextLine();
+                    mudarDado = "email";
                     break;
                 case "6":
-                    System.out.println("Indique o novo Profissão:");
+                    System.out.println("Indique a nova Profissão:");
+                    resposta = stdIn.nextLine();
+                    mudarDado = "profissao";
                     break;
                 default:
                     System.out.println("opção inválida.");
             }
+
+            clienteBD.alteraBD("UPDATE cliente SET " + mudarDado + " = '" + resposta + "' WHERE cliente_id = " + indexCliente);
+            indexCliente = 0;
+            System.out.println("Dado alterado com sucesso.");
 
         } else {
             System.out.println("Cliente não encontrado.");
