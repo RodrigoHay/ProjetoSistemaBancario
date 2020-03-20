@@ -56,10 +56,11 @@ public class ConexaoBD {
         System.out.println("ultimo index " + ultimoIndex);
     }
 
+    // Retorna se um cliente ja existe
     public boolean verificaExistenciaInfo(String fraseQuery) throws SQLException {
         boolean existeCliente = false;
         int verificaNome = 0;
-        ResultSet rs = stmt.executeQuery("SELECT * FROM cliente WHERE nome = 'joana'");
+        ResultSet rs = stmt.executeQuery(fraseQuery);
         while (rs.next()) {
         verificaNome = Integer.parseInt(rs.getString("cliente_id"));
         }
@@ -88,6 +89,13 @@ public class ConexaoBD {
         return bd;
     }
 
+    
+    
+    
+    
+    
+    
+    
 // Getters e Setters #####################################################################################################################################
     public static ConexaoBD getInstancy() {
         if (instancy == null) {

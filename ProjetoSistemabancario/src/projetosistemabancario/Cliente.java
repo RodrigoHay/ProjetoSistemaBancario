@@ -43,7 +43,6 @@ public class Cliente {
                 step = 0;
             } else {
                 setNomeCliente(resposta);
-                step = 2;
             }
         }
         if (step == 2) //CARTÃO CIDADÃO
@@ -119,7 +118,6 @@ public class Cliente {
 
     //Faz a conexão com o banco de dados e envio das informações
     public void CriarClienteBD() throws SQLException {
-
         clienteBD.alteraBD("INSERT INTO cliente(nome, cartaoCidadao, telefone, email, profissao, cliente_ativo) VALUES ('"
                 + this.getNomeCliente() + "','" + this.getNumeroCC() + "','" + this.getTelefone() + "','" + this.getEmailCliente() + "','"
                 + this.getProfissao() + "','" + this.getClienteAtivo() + "');");
@@ -127,17 +125,30 @@ public class Cliente {
         clienteBD.getIndex("SELECT * FROM cliente"); //Pede o ultimo index
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // Getters e Setters #####################################################################################################################################
     public String getNomeCliente() {
         return nomeCliente.toUpperCase();
     }
 
-    public void setNomeCliente(String nomeCliente) {
-        System.out.println("SELECT cliente_id FROM cliente WHERE nome = '" + nomeCliente + "'");
-        try { //SELECT COUNT(0) FROM cliente WHERE nome = 'joana';
-            clienteBD.verificaExistenciaInfo("SELECT COUNT(0) FROM cliente WHERE nome = 'joana'");
-            this.nomeCliente = nomeCliente;
-
+    public void setNomeCliente(String nomeCliente) { //Verifica se cliente existe / se ok faz o set do nome
+        try { 
+            if(clienteBD.verificaExistenciaInfo("SELECT * FROM cliente WHERE nome = '" + nomeCliente + "'") == true){
+               this.nomeCliente = nomeCliente; 
+               step = 2;
+            }else{
+                System.out.println("Cliente já existe no Sistema");
+                step = 0;
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
