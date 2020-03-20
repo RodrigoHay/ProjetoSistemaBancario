@@ -105,7 +105,7 @@ public class Cliente {
         }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//Verifica se cadastro foi concluído ou cancelado
+//Verifica se cadastro foi concluído ou cancelado e insere informações no banco de dados
         if (cadastroClienteCompleto == true) {
             System.out.println("Dados pessoais completos");
             try {
