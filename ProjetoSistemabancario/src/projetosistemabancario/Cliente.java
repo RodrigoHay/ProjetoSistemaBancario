@@ -30,11 +30,12 @@ public class Cliente {
     private int step = 1;
     private boolean cadastroClienteCompleto = false;
     public String criarClienteComando;
-    ConexaoBD clienteBD = ConexaoBD.getInstancy();
+    ConexaoBD clienteBD = ConexaoBD.getInstancy(); // Instância do objeto
 
     public void CriaCliente() {
-
-        //Questionário para criação do cliente
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Questionário para criação do cliente
         if (step == 1) //NOME
         {
             System.out.println("Digite o NOME DO CLIENTE ou 0 para cancelar:");
@@ -101,8 +102,9 @@ public class Cliente {
                 cadastroClienteCompleto = true;
             }
         }
-
-        //Verifica se cadastro foi concluído ou cancelado
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Verifica se cadastro foi concluído ou cancelado
         if (cadastroClienteCompleto == true) {
             System.out.println("Dados pessoais completos");
             try {
@@ -115,8 +117,9 @@ public class Cliente {
             System.out.println("Cadastro cancelado.");
         }
     }
-
-    //Faz a conexão com o banco de dados e envio das informações
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Faz a conexão com o banco de dados e envio das informações
     public void CriarClienteBD() throws SQLException {
         clienteBD.alteraBD("INSERT INTO cliente(nome, cartaoCidadao, telefone, email, profissao, cliente_ativo) VALUES ('"
                 + this.getNomeCliente() + "','" + this.getNumeroCC() + "','" + this.getTelefone() + "','" + this.getEmailCliente() + "','"
@@ -124,8 +127,9 @@ public class Cliente {
 
         clienteBD.getIndex("SELECT * FROM cliente"); //Pede o ultimo index
     }
-
-    // Getters e Setters #####################################################################################################################################
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Getters e Setters 
     public String getNomeCliente() {
         return nomeCliente.toUpperCase();
     }
