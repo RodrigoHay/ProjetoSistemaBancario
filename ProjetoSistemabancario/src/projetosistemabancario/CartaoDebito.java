@@ -12,7 +12,7 @@ import java.sql.SQLException;
 public class CartaoDebito extends CartaoBase {
 
     ConexaoBD cartaoBD = ConexaoBD.getInstancy();
-    
+
     private int indexCliente;
     private Double valor_plafon;
 
@@ -25,8 +25,9 @@ public class CartaoDebito extends CartaoBase {
                 + this.getIndexCliente() + "',\"C\",'" + this.getValor_plafon() + "');");
         setIndexCliente(cartaoBD.getIndex("SELECT * FROM conta"));
     }
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    
     @Override
     public void ListarCartoes() {
 
@@ -51,7 +52,4 @@ public class CartaoDebito extends CartaoBase {
         this.valor_plafon = valor_plafon;
     }
 
-    
-    
-    
 }

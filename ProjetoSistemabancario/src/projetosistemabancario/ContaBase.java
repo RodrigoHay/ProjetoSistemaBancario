@@ -12,7 +12,7 @@ public abstract class ContaBase {
 
     public abstract void CriarConta()throws SQLException;
 
-    public abstract void ListarContaCliente();
+    public abstract void ListarContaCliente(String nome) throws SQLException;
 
     public abstract void MostraSaldo();
 
