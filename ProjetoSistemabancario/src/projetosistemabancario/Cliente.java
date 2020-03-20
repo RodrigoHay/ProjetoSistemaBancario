@@ -119,7 +119,8 @@ public class Cliente {
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//Faz a conexão com o banco de dados e envio das informações
+//Conecta ao banco de dados e cria cliente
+
     public void CriarClienteBD() throws SQLException {
         clienteBD.alteraBD("INSERT INTO cliente(nome, cartaoCidadao, telefone, email, profissao, cliente_ativo) VALUES ('"
                 + this.getNomeCliente() + "','" + this.getNumeroCC() + "','" + this.getTelefone() + "','" + this.getEmailCliente() + "','"
@@ -129,14 +130,61 @@ public class Cliente {
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Conecta ao banco de dados e altera dados do cliente
+
+    public void alterarClienteBD() throws SQLException {
+        int index = 0;
+        System.out.println("Digite o NOME DO CLIENTE:");
+        resposta = stdIn.nextLine();
+        if (clienteBD.verificaExistenciaInfo("SELECT * FROM cliente WHERE nome = '" + resposta + "'") == true) {
+            index = clienteBD.getIndex("SELECT * FROM cliente");
+            //Indica qual informação deseja alterar  
+            System.out.println("Qual informação deseja alterar/Corrigir?");
+            System.out.println("1 - Nome:");
+            System.out.println("2 - Número do cartão cidadão:");
+            System.out.println("3 - Morada:");
+            System.out.println("4 - Telefone:");
+            System.out.println("5 - E-mail:");
+            System.out.println("6 - Profissão:");
+            resposta = stdIn.nextLine();
+            switch (resposta) {
+                case "1":
+                    System.out.println("Indique o novo Nome:");
+                    break;
+                case "2":
+                    System.out.println("Indique o novo Número do cartão cidadão:");
+                    break;
+                case "3":
+                    System.out.println("Indique o novo Morada:");
+                    break;
+                case "4":
+                    System.out.println("Indique o novo Telefone:");
+                    break;
+                case "5":
+                    System.out.println("Indique o novo E-mail:");
+                    break;
+                case "6":
+                    System.out.println("Indique o novo Profissão:");
+                    break;
+                default:
+                    System.out.println("opção inválida.");
+            }
+
+        } else {
+            System.out.println("Cliente não encontrado.");
+        }
+    }
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Getters e Setters 
+
     public String getNomeCliente() {
         return nomeCliente.toUpperCase();
     }
 
     public void setNomeCliente(String nomeCliente) { //Verifica se cliente existe / se ok faz o set do nome
         try {
-            if (clienteBD.verificaExistenciaInfo("SELECT * FROM cliente WHERE nome = '" + nomeCliente + "'") == true) {
+            if (clienteBD.verificaExistenciaInfo("SELECT * FROM cliente WHERE nome = '" + nomeCliente + "'") == false) {
                 this.nomeCliente = nomeCliente;
                 step = 2;
             } else {

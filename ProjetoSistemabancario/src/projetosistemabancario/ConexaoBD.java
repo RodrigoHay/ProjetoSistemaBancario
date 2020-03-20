@@ -38,35 +38,37 @@ public class ConexaoBD {
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Insere/Altera dados no banco de dados
+
     public void alteraBD(String alteraBancoDeDados) throws SQLException {
         stmt.executeUpdate(alteraBancoDeDados);
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //Retorna o index da ultima gravação
-    public void getIndex(String fraseQuery) throws SQLException {
+
+    public int getIndex(String fraseQuery) throws SQLException {
 
         ResultSet rs = stmt.executeQuery(fraseQuery);
-        int ultimoIndex = 0;
+        int index = 0;
         while (rs.next()) {
-            ultimoIndex = Integer.parseInt(rs.getString("cliente_id"));
-
+            index = Integer.parseInt(rs.getString("cliente_id"));
 //            bd.add(rs.getString("country_id"));
 //            bd.add(rs.getString("country"));
         }
-        System.out.println("ultimo index " + ultimoIndex);
+        return index;
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // Retorna se um cliente ja existe
+    // Retorna se um cliente existe
+
     public boolean verificaExistenciaInfo(String fraseQuery) throws SQLException {
         boolean existeCliente = false;
         int verificaNome = 0;
         ResultSet rs = stmt.executeQuery(fraseQuery);
         while (rs.next()) {
-        verificaNome = Integer.parseInt(rs.getString("cliente_id"));
+            verificaNome = Integer.parseInt(rs.getString("cliente_id"));
         }
-        if (verificaNome == 0) {
+        if (verificaNome > 0) {
             existeCliente = true;
         }
         return existeCliente;
@@ -74,6 +76,7 @@ public class ConexaoBD {
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //Retorna os dados do banco de dados
+
     public void getDados(String fraseQuery) throws SQLException {
 
         ResultSet rs = stmt.executeQuery(fraseQuery);
@@ -86,18 +89,13 @@ public class ConexaoBD {
         }
         System.out.println("ultimo index " + ultimoIndex);
     }
-
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //Desponibiliza a arraylist com as informações
     public ArrayList<String> getBD() {
         return bd;
     }
 
-    
-    
-    
-    
-    
-    
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Getters e Setters #####################################################################################################################################
