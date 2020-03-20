@@ -16,9 +16,7 @@ import java.util.ArrayList;
  */
 public class ConexaoBD {
 
-//	+--------------------------------------------------------------------------------------------------------------------------------------+
-//  		Faz a conexão utilizando Singleton Pattern
-//	+--------------------------------------------------------------------------------------------------------------------------------------+
+//Conexão ao Banco de Dados
     // Variaveis
     private Connection conexao;
     private String DB_URL = "jdbc:mysql://localhost/projetosistemabancario";
@@ -39,36 +37,57 @@ public class ConexaoBD {
         }
     }
 
-    
 // Insere/Altera dados no banco de dados
-    public void alteraBD(String alteraBancoDeDados) throws SQLException { // Altera os dados conforme a string de comando (SELECT * FROM country) por exemplo
+    public void alteraBD(String alteraBancoDeDados) throws SQLException {
         stmt.executeUpdate(alteraBancoDeDados);
     }
-    
-    
-    //Retorna os dados e insere num ArrayList 
-    public void getDados() throws SQLException {
 
-        ResultSet rs = stmt.executeQuery("SELECT * FROM cliente"); //SELECT @@IDENTITY
+    //Retorna o index da ultima gravação
+    public void getIndex(String fraseQuery) throws SQLException {
+
+        ResultSet rs = stmt.executeQuery(fraseQuery);
         int ultimoIndex = 0;
         while (rs.next()) {
-              ultimoIndex = Integer.parseInt(rs.getString("cliente_id"));
-              
+            ultimoIndex = Integer.parseInt(rs.getString("cliente_id"));
+
 //            bd.add(rs.getString("country_id"));
 //            bd.add(rs.getString("country"));
         }
-        System.out.println("ultimo index" +ultimoIndex);
-        //select * from cliente where cliente_id = (select max(cliente_id) from cliente)
-}       
+        System.out.println("ultimo index " + ultimoIndex);
+    }
+
+    public boolean verificaExistenciaInfo(String fraseQuery) throws SQLException {
+        boolean existeCliente = false;
+        int verificaNome = 0;
+        ResultSet rs = stmt.executeQuery("SELECT * FROM cliente WHERE nome = 'joana'");
+        while (rs.next()) {
+        verificaNome = Integer.parseInt(rs.getString("cliente_id"));
+        }
+        if (verificaNome == 0) {
+            existeCliente = true;
+        }
+        return existeCliente;
+    }
+
+    //Retorna os dados do banco de dados
+    public void getDados(String fraseQuery) throws SQLException {
+
+        ResultSet rs = stmt.executeQuery(fraseQuery);
+        int ultimoIndex = 0;
+        while (rs.next()) {
+            ultimoIndex = Integer.parseInt(rs.getString("cliente_id"));
+// É PRECISO CONCLUIR A RETIRADA DOS DADOS AQUI
+//            bd.add(rs.getString("country_id"));
+//            bd.add(rs.getString("country"));
+        }
+        System.out.println("ultimo index " + ultimoIndex);
+    }
+
     //Desponibiliza a arraylist com as informações
     public ArrayList<String> getBD() {
         return bd;
     }
 
-    
-    
-    
-    
 // Getters e Setters #####################################################################################################################################
     public static ConexaoBD getInstancy() {
         if (instancy == null) {

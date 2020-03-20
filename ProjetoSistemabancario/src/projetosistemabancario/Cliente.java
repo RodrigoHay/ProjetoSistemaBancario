@@ -19,7 +19,7 @@ public class Cliente {
 
     // Dados pessoais dos clientes
     private String nomeCliente;
-    private int numeroCC;
+    private String numeroCC;
     private String moradaCliente;
     private int telefone;
     private String emailCliente;
@@ -30,6 +30,7 @@ public class Cliente {
     private int step = 1;
     private boolean cadastroClinteCompleto = false;
     public String criarClienteComando;
+    ConexaoBD clienteBD = ConexaoBD.getInstancy();
 
     public void CriaCliente() {
 
@@ -52,8 +53,7 @@ public class Cliente {
             if (resposta.equals("0")) {
                 step = 0;
             } else {
-                respostaConvertidaNumero = Integer.parseInt(resposta);
-                setNumeroCC(respostaConvertidaNumero);
+                setNumeroCC(resposta);
                 step = 3;
             }
         }
@@ -119,32 +119,40 @@ public class Cliente {
 
     //Faz a conexão com o banco de dados e envio das informações
     public void CriarClienteBD() throws SQLException {
-        ConexaoBD clienteBD = ConexaoBD.getInstancy();
+
         clienteBD.alteraBD("INSERT INTO cliente(nome, cartaoCidadao, telefone, email, profissao, cliente_ativo) VALUES ('"
-                + this.getNomeCliente() + "','" + this.getNumeroCC() + "','" + this.getTelefone() + "','" + this.getEmailCliente() + "','" + this.getProfissao() + "','" + this.getClienteAtivo() + "');");
-        clienteBD.getDados();
+                + this.getNomeCliente() + "','" + this.getNumeroCC() + "','" + this.getTelefone() + "','" + this.getEmailCliente() + "','"
+                + this.getProfissao() + "','" + this.getClienteAtivo() + "');");
+
+        clienteBD.getIndex("SELECT * FROM cliente"); //Pede o ultimo index
     }
 
-    
     // Getters e Setters #####################################################################################################################################
     public String getNomeCliente() {
-        return nomeCliente;
+        return nomeCliente.toUpperCase();
     }
 
     public void setNomeCliente(String nomeCliente) {
-        this.nomeCliente = nomeCliente;
+        System.out.println("SELECT cliente_id FROM cliente WHERE nome = '" + nomeCliente + "'");
+        try { //SELECT COUNT(0) FROM cliente WHERE nome = 'joana';
+            clienteBD.verificaExistenciaInfo("SELECT COUNT(0) FROM cliente WHERE nome = 'joana'");
+            this.nomeCliente = nomeCliente;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    public int getNumeroCC() {
-        return numeroCC;
+    public String getNumeroCC() {
+        return numeroCC.toUpperCase();
     }
 
-    public void setNumeroCC(int numeroCC) {
+    public void setNumeroCC(String numeroCC) {
         this.numeroCC = numeroCC;
     }
 
     public String getMoradaCliente() {
-        return moradaCliente;
+        return moradaCliente.toUpperCase();
     }
 
     public void setMoradaCliente(String moradaCliente) {
@@ -168,7 +176,7 @@ public class Cliente {
     }
 
     public String getProfissao() {
-        return profissao;
+        return profissao.toUpperCase();
     }
 
     public void setProfissao(String profissao) {
