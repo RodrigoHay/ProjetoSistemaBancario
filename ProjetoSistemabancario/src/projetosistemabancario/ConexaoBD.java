@@ -24,6 +24,7 @@ public class ConexaoBD {
     private static ConexaoBD instancy;
     ArrayList<String> bd = new ArrayList<String>();
     static Statement stmt = null;
+    private String colunaTabela;
 
     private ConexaoBD() {
         try {
@@ -51,7 +52,7 @@ public class ConexaoBD {
         ResultSet rs = stmt.executeQuery(fraseQuery);
         int index = 0;
         while (rs.next()) {
-            index = Integer.parseInt(rs.getString("cliente_id"));
+            index = Integer.parseInt(rs.getString(colunaTabela));
 //            bd.add(rs.getString("country_id"));
 //            bd.add(rs.getString("country"));
         }
@@ -66,7 +67,7 @@ public class ConexaoBD {
         int verificaNome = 0;
         ResultSet rs = stmt.executeQuery(fraseQuery);
         while (rs.next()) {
-            verificaNome = Integer.parseInt(rs.getString("cliente_id"));
+            verificaNome = Integer.parseInt(rs.getString(colunaTabela));
         }
         if (verificaNome > 0) {
             existeCliente = true;
@@ -110,4 +111,13 @@ public class ConexaoBD {
         return this.conexao;
 
     }
+
+    public String getColunaTabela() {
+        return colunaTabela;
+    }
+
+    public void setColunaTabela(String colunaTabela) {
+        this.colunaTabela = colunaTabela;
+    }
+    
 }

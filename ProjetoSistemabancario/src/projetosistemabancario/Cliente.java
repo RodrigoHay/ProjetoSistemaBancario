@@ -30,8 +30,10 @@ public class Cliente {
     private int step = 1;
     private boolean cadastroClienteCompleto = false;
     public String criarClienteComando;
-    ConexaoBD clienteBD = ConexaoBD.getInstancy(); // Instância do objeto
-    int indexCliente;
+    private int indexCliente;
+
+    ConexaoBD clienteBD = ConexaoBD.getInstancy();
+    ContaOrdem contaOrdem = new ContaOrdem();
 
     public void CriaCliente() {
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -110,6 +112,14 @@ public class Cliente {
             System.out.println("Dados pessoais completos");
             try {
                 CriarClienteBD();
+                clienteBD.setColunaTabela("cliente_id");
+                setIndexCliente(clienteBD.getIndex("SELECT * FROM cliente"));
+                contaOrdem.setIndexCliente(this.getIndexCliente());
+                contaOrdem.setJuros(0.0);
+                contaOrdem.setPeriodo(0);
+                contaOrdem.setSaldo(0.0);
+                contaOrdem.setTipoDeConta("O");
+                contaOrdem.CriarConta();
             } catch (SQLException ex) {
                 System.out.println("Falha ao tentar gravar no banco de dados");
                 System.out.println(ex.getMessage());
@@ -126,8 +136,6 @@ public class Cliente {
         clienteBD.alteraBD("INSERT INTO cliente(nome, cartaoCidadao, telefone, email, profissao, cliente_ativo) VALUES ('"
                 + this.getNomeCliente() + "','" + this.getNumeroCC() + "','" + this.getTelefone() + "','" + this.getEmailCliente() + "','"
                 + this.getProfissao() + "','" + this.getClienteAtivo() + "');");
-
-        clienteBD.getIndex("SELECT * FROM cliente"); //Pede o ultimo index
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -137,8 +145,9 @@ public class Cliente {
         String mudarDado = "";
         System.out.println("Digite o NOME DO CLIENTE:");
         resposta = stdIn.nextLine();
+        clienteBD.setColunaTabela("cliente_id");
         if (clienteBD.verificaExistenciaInfo("SELECT * FROM cliente WHERE nome = '" + resposta + "'") == true) {
-            indexCliente = clienteBD.getIndex("SELECT * FROM cliente");
+            indexCliente = clienteBD.getIndex("SELECT * FROM cliente WHERE nome = '" + resposta + "'");
             //Indica qual informação deseja alterar  
             System.out.println("Qual informação deseja alterar/Corrigir?");
             System.out.println("1 - Nome:");
@@ -151,17 +160,17 @@ public class Cliente {
             switch (resposta) {
                 case "1":
                     System.out.println("Indique o novo Nome:");
-                    resposta = stdIn.nextLine();
+                    resposta = stdIn.nextLine().toUpperCase();
                     mudarDado = "nome";
                     break;
                 case "2":
                     System.out.println("Indique o novo Número do Cartão Cidadão:");
-                    resposta = stdIn.nextLine();
+                    resposta = stdIn.nextLine().toUpperCase();
                     mudarDado = "cartaoCidadao";
                     break;
                 case "3":
                     System.out.println("Indique a nova Morada:");
-                    resposta = stdIn.nextLine();
+                    resposta = stdIn.nextLine().toUpperCase();
                     mudarDado = "morada";
                     break;
                 case "4":
@@ -176,7 +185,7 @@ public class Cliente {
                     break;
                 case "6":
                     System.out.println("Indique a nova Profissão:");
-                    resposta = stdIn.nextLine();
+                    resposta = stdIn.nextLine().toUpperCase();
                     mudarDado = "profissao";
                     break;
                 default:
@@ -184,7 +193,7 @@ public class Cliente {
             }
 
             clienteBD.alteraBD("UPDATE cliente SET " + mudarDado + " = '" + resposta + "' WHERE cliente_id = " + indexCliente);
-            indexCliente = 0;
+            setIndexCliente(0);
             System.out.println("Dado alterado com sucesso.");
 
         } else {
@@ -234,7 +243,13 @@ public class Cliente {
     }
 
     public void setTelefone(int telefone) {
-        this.telefone = telefone;
+        String converteNumero = String.valueOf(telefone);
+        if(converteNumero.length()>9){
+            converteNumero = converteNumero.substring(0, 9);
+            this.telefone = Integer.parseInt(converteNumero);
+        }else{
+          this.telefone = telefone;  
+        }
     }
 
     public String getEmailCliente() {
@@ -255,6 +270,14 @@ public class Cliente {
 
     public int getClienteAtivo() {
         return clienteAtivo;
+    }
+
+    public int getIndexCliente() {
+        return indexCliente;
+    }
+
+    public void setIndexCliente(int indexCliente) {
+        this.indexCliente = indexCliente;
     }
 
 }
