@@ -28,7 +28,7 @@ public class Cliente {
     private String resposta;
     private int respostaConvertidaNumero;
     private int step = 1;
-    private boolean cadastroClinteCompleto = false;
+    private boolean cadastroClienteCompleto = false;
     public String criarClienteComando;
     ConexaoBD clienteBD = ConexaoBD.getInstancy();
 
@@ -98,12 +98,12 @@ public class Cliente {
                 step = 0;
             } else {
                 setProfissao(resposta);
-                cadastroClinteCompleto = true;
+                cadastroClienteCompleto = true;
             }
         }
 
         //Verifica se cadastro foi concluído ou cancelado
-        if (cadastroClinteCompleto == true) {
+        if (cadastroClienteCompleto == true) {
             System.out.println("Dados pessoais completos");
             try {
                 CriarClienteBD();
@@ -125,28 +125,18 @@ public class Cliente {
         clienteBD.getIndex("SELECT * FROM cliente"); //Pede o ultimo index
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     // Getters e Setters #####################################################################################################################################
     public String getNomeCliente() {
         return nomeCliente.toUpperCase();
     }
 
     public void setNomeCliente(String nomeCliente) { //Verifica se cliente existe / se ok faz o set do nome
-        try { 
-            if(clienteBD.verificaExistenciaInfo("SELECT * FROM cliente WHERE nome = '" + nomeCliente + "'") == true){
-               this.nomeCliente = nomeCliente; 
-               step = 2;
-            }else{
-                System.out.println("Cliente já existe no Sistema");
+        try {
+            if (clienteBD.verificaExistenciaInfo("SELECT * FROM cliente WHERE nome = '" + nomeCliente + "'") == true) {
+                this.nomeCliente = nomeCliente;
+                step = 2;
+            } else {
+                System.out.println("Cliente já existe no Sistema. Não é possivel completar o cadastro.");
                 step = 0;
             }
         } catch (SQLException e) {
