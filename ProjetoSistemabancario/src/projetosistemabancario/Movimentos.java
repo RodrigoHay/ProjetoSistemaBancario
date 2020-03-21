@@ -7,5 +7,9 @@ package projetosistemabancario;
  * @author Rodrigo Hay
  */
 public class Movimentos {
-    
-}
+
+    public void GravaMovimento() {
+
+
+        }
+    }

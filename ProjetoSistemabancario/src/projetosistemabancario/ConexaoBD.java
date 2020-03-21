@@ -24,7 +24,7 @@ public class ConexaoBD {
     private static ConexaoBD instancy;
     ArrayList<String> bd = new ArrayList<String>();
     static Statement stmt = null;
-    private String colunaTabela;
+    //private String colunaTabela;
     private String info1;
     private String info2;
 
@@ -49,7 +49,7 @@ public class ConexaoBD {
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //Retorna o index da ultima gravação
 
-    public int getIndex(String fraseQuery) throws SQLException {
+    public int getIndex(String fraseQuery, String colunaTabela) throws SQLException {
 
         ResultSet rs = stmt.executeQuery(fraseQuery);
         int index = 0;
@@ -60,9 +60,9 @@ public class ConexaoBD {
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // Verifica se um cliente existe
+    // Verifica se um cliente/conta/cartão existe
 
-    public boolean verificaExistenciaInfo(String fraseQuery) throws SQLException {
+    public boolean verificaExistenciaInfo(String fraseQuery, String colunaTabela) throws SQLException {
         boolean existeCliente = false;
         int verificaNome = 0;
         ResultSet rs = stmt.executeQuery(fraseQuery);
@@ -116,13 +116,13 @@ public class ConexaoBD {
 
     }
 
-    public String getColunaTabela() {
-        return colunaTabela;
-    }
-
-    public void setColunaTabela(String colunaTabela) {
-        this.colunaTabela = colunaTabela;
-    }
+//    public String getColunaTabela() {
+//        return colunaTabela;
+//    }
+//
+//    public void setColunaTabela(String colunaTabela) {
+//        this.colunaTabela = colunaTabela;
+//    }
 
     public String getInfo1() {
         return info1;

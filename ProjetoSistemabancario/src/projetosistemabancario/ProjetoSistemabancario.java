@@ -55,10 +55,10 @@ public class ProjetoSistemabancario {
                     System.out.println("Levantamento na conta Ordem.");
                     contaOrdem.LevantaContaOrdem();
                     break;
-//                case "7":
-//                    System.out.println("Levantamento na conta Ordem.");
-//                    contaOrdem.LevantaContaOrdem();
-//                    break;
+                case "7":
+                    System.out.println("Transferência da conta Ordem.");
+                    contaOrdem.Transferencia();
+                    break;
                 default:
                     System.out.println("Opção incorreta.");
             }

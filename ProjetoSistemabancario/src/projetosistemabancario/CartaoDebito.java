@@ -20,10 +20,12 @@ public class CartaoDebito extends CartaoBase {
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     @Override
     public void CriarCartao() throws SQLException {
-        cartaoBD.setColunaTabela("conta_id");
+        //cartaoBD.setColunaTabela("conta_id");
+        
         cartaoBD.alteraBD("INSERT INTO cartoes(conta_id, credito_debito, valor_plafon) VALUES ('"
                 + this.getIndexCliente() + "',\"C\",'" + this.getValor_plafon() + "');");
-        setIndexCliente(cartaoBD.getIndex("SELECT * FROM conta"));
+        
+        setIndexCliente(cartaoBD.getIndex("SELECT * FROM conta", "conta_id"));
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
