@@ -47,6 +47,10 @@ public class ProjetoSistemabancario {
                     System.out.println("Saldo conta Ordem.");
                     contaOrdem.MostraSaldo();
                     break;
+                case "5":
+                    System.out.println("Depósito na conta Ordem.");
+                    contaOrdem.depositoContaOrdem();
+                    break;
                 default:
                     System.out.println("Opção incorreta.");
             }

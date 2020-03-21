@@ -83,6 +83,24 @@ public class ContaOrdem extends ContaBase {
     public void GravaMovimento() {
 
     }
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Depósito na conta Ordem
+
+    public void depositoContaOrdem() throws SQLException {
+        System.out.println("Insira o CODIGO do CARTÃO do cliente:");
+        resposta = stdIn.nextLine();
+        contaBD.setColunaTabela("cartao_id");
+        if (contaBD.verificaExistenciaInfo("SELECT * FROM cartoes WHERE cartao_id = '" + resposta + "'") == true) {
+            System.out.println("Qual o valor?");
+            contaBD.setInfo1("saldo");
+            contaBD.setInfo2("");
+            contaBD.getDados("SELECT cartoes.cartao_id, conta.conta_id, conta.saldo FROM conta, cartoes WHERE cartoes.conta_id = conta.conta_id and cartoes.conta_id = " + resposta);
+            contaBD.getBD().get(0);
+        } else {
+            System.out.println("Cliente não encontrado.");
+        }
+    }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
