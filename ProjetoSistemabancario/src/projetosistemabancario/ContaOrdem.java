@@ -122,7 +122,7 @@ public class ContaOrdem extends ContaBase {
                 this.valorLevantamento = stdIn.nextLine();
                 LevantaContaOrdem();
             }
-            if (atividade.equals("transferencia")) {
+            if (atividade.equals("transferencia")) { 
                 System.out.println("Insira o NÚMERO DA CONTA onde será CREDITADO:");
                 respostaTransferencia = stdIn.nextLine();
                 fraseQuery = "SELECT conta_id FROM conta WHERE conta_id = '" + respostaTransferencia + "'";
@@ -136,7 +136,7 @@ public class ContaOrdem extends ContaBase {
                     LevantaContaOrdem();
                     DepositoContaOrdem();
                 } else {
-                    System.out.println("Conta não encontrada.");
+                    System.out.println("Conta não encontrada.");                        //fazer travar se não tiver saldo
                 }
             }
         } else {
