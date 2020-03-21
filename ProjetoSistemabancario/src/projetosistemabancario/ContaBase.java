@@ -16,6 +16,6 @@ public abstract class ContaBase {
 
     public abstract void MostraSaldo() throws SQLException;
 
-    public abstract void GravaMovimento();
+    public abstract void GravaMovimento()throws SQLException;
 
 }

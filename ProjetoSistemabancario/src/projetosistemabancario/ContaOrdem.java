@@ -84,14 +84,21 @@ public class ContaOrdem extends ContaBase {
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public void GravaMovimento() {
-
+    public void GravaMovimento() throws SQLException {
+        contaBD.setColunaTabela("conta_id");
+        contaBD.alteraBD("INSERT INTO conta(cliente_id, juros, periodo, saldo, tipo_de_conta) VALUES ('"
+                + getIndexCliente() + "','" + this.getJuros() + "','" + this.getPeriodo() + "','" + this.getSaldo() + "','"
+                + this.getTipoDeConta() + "');");
+        setIndexCliente(contaBD.getIndex("SELECT * FROM conta"));
+        cartaoDebito.setValor_plafon(0.0);
+        cartaoDebito.setIndexCliente(this.getIndexCliente());
+        cartaoDebito.CriarCartao();
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //Depósito na conta Ordem
 
-    public void depositoContaOrdem() throws SQLException {
+    public void DepositoContaOrdem() throws SQLException {
         System.out.println("Insira o CODIGO do CARTÃO do cliente:");
         String respostaID = stdIn.nextLine();
         contaBD.setColunaTabela("cartao_id");
@@ -115,7 +122,7 @@ public class ContaOrdem extends ContaBase {
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Levantamento conta Ordem
 
-    public void levantaContaOrdem() throws SQLException {
+    public void LevantaContaOrdem() throws SQLException {
         System.out.println("Insira o CODIGO do CARTÃO do cliente:");
         String respostaID = stdIn.nextLine();
         contaBD.setColunaTabela("cartao_id");
@@ -138,6 +145,13 @@ public class ContaOrdem extends ContaBase {
         } else {
             System.out.println("Cliente não encontrado.");
         }
+    }
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Transferência
+    public void Transferencia() {
+
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

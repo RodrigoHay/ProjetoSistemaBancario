@@ -49,12 +49,16 @@ public class ProjetoSistemabancario {
                     break;
                 case "5":
                     System.out.println("Depósito na conta Ordem.");
-                    contaOrdem.depositoContaOrdem();
+                    contaOrdem.DepositoContaOrdem();
                     break;
                 case "6":
                     System.out.println("Levantamento na conta Ordem.");
-                    contaOrdem.levantaContaOrdem();
+                    contaOrdem.LevantaContaOrdem();
                     break;
+//                case "7":
+//                    System.out.println("Levantamento na conta Ordem.");
+//                    contaOrdem.LevantaContaOrdem();
+//                    break;
                 default:
                     System.out.println("Opção incorreta.");
             }
