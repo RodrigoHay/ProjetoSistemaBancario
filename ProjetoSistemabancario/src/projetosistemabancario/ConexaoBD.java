@@ -25,6 +25,8 @@ public class ConexaoBD {
     ArrayList<String> bd = new ArrayList<String>();
     static Statement stmt = null;
     private String colunaTabela;
+    private String info1;
+    private String info2;
 
     private ConexaoBD() {
         try {
@@ -60,7 +62,7 @@ public class ConexaoBD {
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // Retorna se um cliente existe
+    // Verifica se um cliente existe
 
     public boolean verificaExistenciaInfo(String fraseQuery) throws SQLException {
         boolean existeCliente = false;
@@ -83,12 +85,12 @@ public class ConexaoBD {
         ResultSet rs = stmt.executeQuery(fraseQuery);
         int ultimoIndex = 0;
         while (rs.next()) {
-            ultimoIndex = Integer.parseInt(rs.getString("cliente_id"));
-// É PRECISO CONCLUIR A RETIRADA DOS DADOS AQUI
-//            bd.add(rs.getString("country_id"));
-//            bd.add(rs.getString("country"));
+            ultimoIndex = Integer.parseInt(rs.getString(colunaTabela));
+            if(!info1.equals(""))
+            bd.add(rs.getString(info1));
+            if(!info2.equals(""))
+            bd.add(rs.getString(info2));
         }
-        System.out.println("ultimo index " + ultimoIndex);
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -119,6 +121,22 @@ public class ConexaoBD {
 
     public void setColunaTabela(String colunaTabela) {
         this.colunaTabela = colunaTabela;
+    }
+
+    public String getInfo1() {
+        return info1;
+    }
+
+    public void setInfo1(String info1) {
+        this.info1 = info1;
+    }
+
+    public String getInfo2() {
+        return info2;
+    }
+
+    public void setInfo2(String info2) {
+        this.info2 = info2;
     }
 
 }

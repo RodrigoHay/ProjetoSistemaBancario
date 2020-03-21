@@ -22,8 +22,9 @@ public class ProjetoSistemabancario {
     public static void main(String[] args) {
         String resposta = "";
         Cliente cliente = new Cliente();
+        ContaOrdem contaOrdem = new ContaOrdem();
         Scanner stdIn = new Scanner(System.in);
-        System.out.println("Inserir opção 1-criar, 2-alterar, 0-cancelar");
+        System.out.println("Inserir opção 1-criar, 2-alterar, 3-Listar conta Ordem, 4-Saldo conta Ordem, 0-cancelar");
         resposta = stdIn.nextLine();
         try {
             switch (resposta) {
@@ -37,6 +38,14 @@ public class ProjetoSistemabancario {
                 case "2":
                     System.out.println("Alterar cliente.");
                     cliente.alterarClienteBD();
+                    break;
+                case "3":
+                    System.out.println("Listar conta Ordem.");
+                    contaOrdem.ListarContaCliente();
+                    break;
+                case "4":
+                    System.out.println("Saldo conta Ordem.");
+                    contaOrdem.MostraSaldo();
                     break;
                 default:
                     System.out.println("Opção incorreta.");

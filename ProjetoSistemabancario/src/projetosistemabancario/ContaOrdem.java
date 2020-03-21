@@ -8,12 +8,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Scanner;
 
 /**
  * @author Rodrigo Hay
  */
 public class ContaOrdem extends ContaBase {
 
+    Scanner stdIn = new Scanner(System.in);
     ConexaoBD contaBD = ConexaoBD.getInstancy();
     CartaoDebito cartaoDebito = new CartaoDebito();
 
@@ -24,6 +26,7 @@ public class ContaOrdem extends ContaBase {
     private Double saldo = 0.0;
     private String tipoDeConta = "ORDEM";
     private int indexCliente;
+    String resposta;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -42,21 +45,37 @@ public class ContaOrdem extends ContaBase {
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //Faz a listagem de contas
+
     @Override
-    public void ListarContaCliente(String nome) throws SQLException {
-        if (contaBD.verificaExistenciaInfo("SELECT * FROM cliente WHERE nome = '" + nome + "'") == true) {
-            contaBD.getDados("SELECT conta.conta_id, conta.tipo_de_conta FROM conta, cliente WHERE cliente.cliente_id = conta.cliente_id AND nome = '" + nome + "')");
+    public void ListarContaCliente() throws SQLException {
+        System.out.println("Insira o NOME do cliente:");
+        resposta = stdIn.nextLine();
+        contaBD.setColunaTabela("cliente_id");
+        if (contaBD.verificaExistenciaInfo("SELECT * FROM cliente WHERE nome = '" + resposta + "'") == true) {
+            contaBD.setInfo1("conta_id");
+            contaBD.setInfo2("tipo_de_conta");
+            contaBD.getDados("SELECT cliente.cliente_id, conta.conta_id, conta.tipo_de_conta FROM conta, cliente WHERE cliente.cliente_id = conta.cliente_id AND nome = '" + resposta + "'");
         } else {
             System.out.println("Cliente não encontrado.");
         }
-    }
+    }   //FALTA FAZER O VIEW
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Mostra saldo conta Ordem
 
     @Override
-    public void MostraSaldo() {
-
-    }
+    public void MostraSaldo() throws SQLException {
+        System.out.println("Insira o CODIGO do CARTÃO do cliente:");
+        resposta = stdIn.nextLine();
+        contaBD.setColunaTabela("cartao_id");
+        if (contaBD.verificaExistenciaInfo("SELECT * FROM cartoes WHERE cartao_id = '" + resposta + "'") == true) {
+            contaBD.setInfo1("saldo");
+            contaBD.setInfo2("");
+            contaBD.getDados("SELECT cartoes.cartao_id, conta.conta_id, conta.saldo FROM conta, cartoes WHERE cartoes.conta_id = conta.conta_id and cartoes.conta_id = " + resposta);
+        } else {
+            System.out.println("Cliente não encontrado.");
+        }
+    }  //FALTA FAZER O VIEW
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
