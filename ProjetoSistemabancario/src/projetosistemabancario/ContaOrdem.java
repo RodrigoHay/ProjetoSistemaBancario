@@ -29,7 +29,13 @@ public class ContaOrdem extends ContaBase {
     private String tipoDeConta = "ORDEM";
     private int indexCliente;
     String resposta;
-    private Double valor = 0.0;
+    private String respostaID;
+    private String respostaDeposito;
+    private String respostaLevantamento;
+    private String respostaTransferencia;
+    private String valorLevantamento;
+    private String valorDeposito;
+    private String deposito_levantamento;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -39,7 +45,6 @@ public class ContaOrdem extends ContaBase {
         contaBD.alteraBD("INSERT INTO conta(cliente_id, juros, periodo, saldo, tipo_de_conta) VALUES ('"
                 + getIndexCliente() + "','" + this.getJuros() + "','" + this.getPeriodo() + "','" + this.getSaldo() + "','"
                 + this.getTipoDeConta() + "');");
-        //setIndexCliente(contaBD.getIndex("SELECT * FROM conta"));
         setIndexCliente(contaBD.getIndex("SELECT * FROM conta", "conta_id"));
         cartaoDebito.setValor_plafon(0.0);
         cartaoDebito.setIndexCliente(this.getIndexCliente());
@@ -53,7 +58,6 @@ public class ContaOrdem extends ContaBase {
     public void ListarContaCliente() throws SQLException {
         System.out.println("Insira o NOME do cliente:");
         resposta = stdIn.nextLine();
-        //contaBD.setColunaTabela("cliente_id");
         String fraseQuery = "SELECT cliente_id FROM cliente WHERE nome = '" + resposta + "'";
         if (contaBD.verificaExistenciaInfo(fraseQuery, "cliente_id") == true) {
             contaBD.setInfo1("conta_id");
@@ -72,7 +76,6 @@ public class ContaOrdem extends ContaBase {
     public void MostraSaldo() throws SQLException {
         System.out.println("Insira o CODIGO do CARTÃO do cliente:");
         resposta = stdIn.nextLine();
-        //contaBD.setColunaTabela("cartao_id");
         String fraseQuery = "SELECT cartao_id FROM cartoes WHERE cartao_id = '" + resposta + "'";
         if (contaBD.verificaExistenciaInfo(fraseQuery, "cartao_id") == true) {
             contaBD.setInfo1("saldo");
@@ -88,7 +91,6 @@ public class ContaOrdem extends ContaBase {
 
     @Override
     public void GravaMovimento() throws SQLException {
-        //contaBD.setColunaTabela("conta_id");
         contaBD.alteraBD("INSERT INTO conta(cliente_id, juros, periodo, saldo, tipo_de_conta) VALUES ('"
                 + getIndexCliente() + "','" + this.getJuros() + "','" + this.getPeriodo() + "','" + this.getSaldo() + "','"
                 + this.getTipoDeConta() + "');");
@@ -97,106 +99,87 @@ public class ContaOrdem extends ContaBase {
         cartaoDebito.setIndexCliente(this.getIndexCliente());
         movimentos.GravaMovimento();
     }
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Define a movimentação (deposito/levantamento/transferencia)
+    public void Atividade(String atividade) throws SQLException {
+        System.out.println("Insira o CODIGO do CARTÃO:");
+        respostaID = stdIn.nextLine();
+        String fraseQuery = "SELECT cartao_id FROM cartoes WHERE cartao_id = '" + respostaID + "'";
+        if (contaBD.verificaExistenciaInfo(fraseQuery, "cartao_id") == true) { //Verifica se existe cartão 
+            if (atividade.equals("deposito")) {
+                respostaDeposito = respostaID;
+                deposito_levantamento = "cartao_id";
+                System.out.println("Valor do deposito na Conta Ordem:");
+                this.valorDeposito = stdIn.nextLine();
+                DepositoContaOrdem();
+            }
+            if (atividade.equals("levantamento")) {
+                respostaLevantamento = respostaID;
+                deposito_levantamento = "cartao_id";
+                System.out.println("Valor do levantamento da Conta Ordem:");
+                this.valorLevantamento = stdIn.nextLine();
+                LevantaContaOrdem();
+            }
+            if (atividade.equals("transferencia")) {
+                System.out.println("Insira o NÚMERO DA CONTA onde será CREDITADO:");
+                respostaTransferencia = stdIn.nextLine();
+                fraseQuery = "SELECT conta_id FROM conta WHERE conta_id = '" + respostaTransferencia + "'";
+                if (contaBD.verificaExistenciaInfo(fraseQuery, "conta_id") == true) {
+                    deposito_levantamento = "conta.conta_id";
+                    respostaDeposito = respostaTransferencia;
+                    respostaLevantamento = respostaID;
+                    System.out.println("Valor da transferencia:");
+                    this.valorDeposito = stdIn.nextLine();
+                    this.valorLevantamento = this.valorDeposito;
+                    LevantaContaOrdem();
+                    DepositoContaOrdem();
+                } else {
+                    System.out.println("Conta não encontrada.");
+                }
+            }
+        } else {
+            System.out.println("Cliente não encontrado.");
+        }
+    }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //Depósito na conta Ordem
 
     public void DepositoContaOrdem() throws SQLException {
-        System.out.println("Insira o CODIGO do CARTÃO do cliente:");
-        String respostaID = stdIn.nextLine();
-        //contaBD.setColunaTabela("cartao_id");
-        String fraseQuery = "SELECT cartao_id FROM cartoes WHERE cartao_id = '" + respostaID + "'";
-        if (contaBD.verificaExistenciaInfo(fraseQuery, "cartao_id") == true) { //Verifica se existe cliente
-            System.out.println("Qual o valor?");
-            resposta = stdIn.nextLine();
-            valor = Double.parseDouble(resposta);
-            //contaBD.setColunaTabela("saldo");
-            contaBD.setInfo1("saldo");
-            contaBD.setInfo2("conta_id");
-            contaBD.getDados("SELECT conta.saldo, conta.conta_id FROM cartoes, conta WHERE conta.conta_id = cartoes.conta_id and cartao_id = '" + respostaID + "'"); //Retorna o saldo e o id da conta
-            valor = valor + Double.parseDouble(contaBD.getBD().get(0));
-            int indexConta = Integer.parseInt(contaBD.getBD().get(1));
-            contaBD.alteraBD("UPDATE conta SET saldo = " + valor + " WHERE conta_id = " + indexConta); //Faz o update do novo valor na conta
-        } else {
-            System.out.println("Cliente não encontrado.");
-        }
+
+        Double valorD = Double.parseDouble(valorDeposito);
+        contaBD.setInfo1("saldo");
+        contaBD.setInfo2("conta_id");
+        contaBD.getDados("SELECT conta.saldo, conta.conta_id FROM cartoes, conta WHERE conta.conta_id = cartoes.conta_id and " + deposito_levantamento + " = '" + respostaDeposito + "'"); //Retorna o saldo e o id da conta
+        valorD = valorD + Double.parseDouble(contaBD.getBD().get(0));
+        int indexConta = Integer.parseInt(contaBD.getBD().get(1));
+        contaBD.alteraBD("UPDATE conta SET saldo = " + valorD + " WHERE conta_id = " + indexConta); //Faz o update do novo valor na conta
+
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Levantamento conta Ordem
 
     public void LevantaContaOrdem() throws SQLException {
-        System.out.println("Insira o CODIGO do CARTÃO do cliente:");
-        String respostaID = stdIn.nextLine();
-        //contaBD.setColunaTabela("cartao_id");
-        String fraseQuery = "SELECT cartao_id FROM cartoes WHERE cartao_id = '" + respostaID + "'";
-        if (contaBD.verificaExistenciaInfo(fraseQuery, "cartao_id") == true) { //Verifica se existe cliente
-            System.out.println("Qual o valor?");
-            resposta = stdIn.nextLine();
-            valor = Double.parseDouble(resposta);
-            //contaBD.setColunaTabela("saldo");
-            contaBD.setInfo1("saldo");
-            contaBD.setInfo2("conta_id");
-            contaBD.getDados("SELECT conta.saldo, conta.conta_id FROM cartoes, conta WHERE conta.conta_id = cartoes.conta_id and cartao_id = '" + respostaID + "'"); //Retorna o saldo e o id da conta
-            if (Double.parseDouble(contaBD.getBD().get(0)) >= valor) {
-                valor = Double.parseDouble(contaBD.getBD().get(0)) - valor;
-                int indexConta = Integer.parseInt(contaBD.getBD().get(1));
-                contaBD.alteraBD("UPDATE conta SET saldo = " + valor + " WHERE conta_id = " + indexConta); //Faz o update do novo valor na conta
-            } else {
-                System.out.println("Saldo insuficiente.");
-            }
+
+        Double valorL = Double.parseDouble(valorLevantamento);
+        contaBD.setInfo1("saldo");
+        contaBD.setInfo2("conta_id");
+        contaBD.getDados("SELECT conta.saldo, conta.conta_id FROM cartoes, conta WHERE conta.conta_id = cartoes.conta_id and cartao_id = '" + respostaLevantamento + "'"); //Retorna o saldo e o id da conta
+        if (Double.parseDouble(contaBD.getBD().get(0)) >= valorL) {
+            valorL = Double.parseDouble(contaBD.getBD().get(0)) - valorL;
+            int indexConta = Integer.parseInt(contaBD.getBD().get(1));
+            contaBD.alteraBD("UPDATE conta SET saldo = " + valorL + " WHERE conta_id = " + indexConta); //Faz o update do novo valor na conta
         } else {
-            System.out.println("Cliente não encontrado.");
+            System.out.println("Saldo insuficiente.");
         }
     }
-
-//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// Transferência
-    public void Transferencia() throws SQLException {
-        System.out.println("Insira o CODIGO do CARTÃO da conta origem:");
-        String respostaID1 = stdIn.nextLine();
-        System.out.println("Insira o CODIGO da conta destino:");
-        String respostaID2 = stdIn.nextLine();
-
-        //contaBD.setColunaTabela("cartao_id");
-        String fraseQuery = "SELECT cartao_id FROM cartoes WHERE cartao_id = '" + respostaID1 + "'";
-        boolean cartao = contaBD.verificaExistenciaInfo(fraseQuery, "cartao_id");
-        //contaBD.setColunaTabela("cartao_id");
-        fraseQuery = "SELECT conta_id FROM conta WHERE conta_id = '" + respostaID2 + "'";
-        boolean conta = contaBD.verificaExistenciaInfo(fraseQuery, "cartao_id");
-        if (cartao == true && conta == true) { //Verifica se existe cliente e conta
-            System.out.println("Qual o valor?");
-            resposta = stdIn.nextLine();
-            valor = Double.parseDouble(resposta);
-            contaBD.setInfo1("saldo");
-            contaBD.setInfo2("conta_id");
-            contaBD.getDados("SELECT conta.saldo, conta.conta_id FROM cartoes, conta WHERE conta.conta_id = cartoes.conta_id and cartao_id = '" + respostaID1 + "'"); //Retorna o saldo e o id da conta
-            if (Double.parseDouble(contaBD.getBD().get(0)) >= valor) {
-                valor = Double.parseDouble(contaBD.getBD().get(0)) - valor;
-                int indexConta = Integer.parseInt(contaBD.getBD().get(1));
-                System.out.println("valor soma: € " + (valor)); //APAGAR
-                contaBD.alteraBD("UPDATE conta SET saldo = " + valor + " WHERE conta_id = " + indexConta); //Faz o update do novo valor na conta
-                
-                
-                
-                
-            } else {
-                System.out.println("Saldo insuficiente.");
-            }
-        } else {
-            if (cartao) {
-                System.out.println("Conta origem não encontrada.");
-            }
-            if (conta) {
-                System.out.println("Conta destino não encontrada.");
-            }
-        }
-    }
-
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Getters e Setters 
+
     public int getCliente_id() {
         return cliente_id;
     }

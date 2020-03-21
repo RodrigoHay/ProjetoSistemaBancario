@@ -24,7 +24,7 @@ public class ProjetoSistemabancario {
         Cliente cliente = new Cliente();
         ContaOrdem contaOrdem = new ContaOrdem();
         Scanner stdIn = new Scanner(System.in);
-        System.out.println("Inserir opção 1-criar, 2-alterar, 3-Listar conta Ordem, 4-Saldo conta Ordem, 5-Deposito, 6-Levantamento conta Ordem 0-cancelar");
+        System.out.println("Inserir opção 1-criar, 2-alterar, 3-Listar conta Ordem, 4-Saldo conta Ordem, 5-Deposito, 6-Levantamento, 7-Transferencia conta Ordem 0-cancelar");
         resposta = stdIn.nextLine();
         try {
             switch (resposta) {
@@ -49,15 +49,16 @@ public class ProjetoSistemabancario {
                     break;
                 case "5":
                     System.out.println("Depósito na conta Ordem.");
-                    contaOrdem.DepositoContaOrdem();
+                    //contaOrdem.DepositoContaOrdem();
+                    contaOrdem.Atividade("deposito");
                     break;
                 case "6":
                     System.out.println("Levantamento na conta Ordem.");
-                    contaOrdem.LevantaContaOrdem();
+                    contaOrdem.Atividade("levantamento");
                     break;
                 case "7":
                     System.out.println("Transferência da conta Ordem.");
-                    contaOrdem.Transferencia();
+                    contaOrdem.Atividade("transferencia");
                     break;
                 default:
                     System.out.println("Opção incorreta.");

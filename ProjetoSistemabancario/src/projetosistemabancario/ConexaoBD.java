@@ -79,7 +79,7 @@ public class ConexaoBD {
     //Retorna os dados do banco de dados
 
     public void getDados(String fraseQuery) throws SQLException {
-
+        bd.clear();
         ResultSet rs = stmt.executeQuery(fraseQuery);
         while (rs.next()) {
             if (!this.info1.equals("")) {
