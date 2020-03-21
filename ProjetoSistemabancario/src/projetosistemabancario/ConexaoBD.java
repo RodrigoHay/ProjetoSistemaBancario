@@ -55,8 +55,6 @@ public class ConexaoBD {
         int index = 0;
         while (rs.next()) {
             index = Integer.parseInt(rs.getString(colunaTabela));
-//            bd.add(rs.getString("country_id"));
-//            bd.add(rs.getString("country"));
         }
         return index;
     }
@@ -83,19 +81,24 @@ public class ConexaoBD {
     public void getDados(String fraseQuery) throws SQLException {
 
         ResultSet rs = stmt.executeQuery(fraseQuery);
-        int ultimoIndex = 0;
         while (rs.next()) {
-            ultimoIndex = Integer.parseInt(rs.getString(colunaTabela));
-            if(!info1.equals(""))
-            bd.add(rs.getString(info1));
-            if(!info2.equals(""))
-            bd.add(rs.getString(info2));
+            if (!this.info1.equals("")) {
+                bd.add(rs.getString(info1));
+                System.out.println("impressao direta da bd " + bd.get(0));
+            }
+            if (!this.info2.equals("")) {
+                bd.add(rs.getString(info2));
+                System.out.println("impressao direta da bd " + bd.get(1));
+            }
         }
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    //Desponibiliza a arraylist com as informações
+//Disponibiliza as informações do array  
 
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Desponibiliza a arraylist com as informações
     public ArrayList<String> getBD() {
         return bd;
     }

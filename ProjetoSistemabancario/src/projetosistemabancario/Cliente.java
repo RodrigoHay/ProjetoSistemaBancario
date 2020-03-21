@@ -118,7 +118,7 @@ public class Cliente {
                 contaOrdem.setJuros(0.0);
                 contaOrdem.setPeriodo(0);
                 contaOrdem.setSaldo(0.0);
-                contaOrdem.setTipoDeConta("O");
+                contaOrdem.setTipoDeConta("ORDEM");
                 contaOrdem.CriarConta();
             } catch (SQLException ex) {
                 System.out.println("Falha ao tentar gravar no banco de dados");

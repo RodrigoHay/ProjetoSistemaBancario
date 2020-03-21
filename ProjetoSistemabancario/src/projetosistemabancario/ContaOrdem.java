@@ -18,6 +18,7 @@ public class ContaOrdem extends ContaBase {
     Scanner stdIn = new Scanner(System.in);
     ConexaoBD contaBD = ConexaoBD.getInstancy();
     CartaoDebito cartaoDebito = new CartaoDebito();
+    View view = new View();
 
     private int cliente_id;
     private int conta_id;
@@ -27,6 +28,7 @@ public class ContaOrdem extends ContaBase {
     private String tipoDeConta = "ORDEM";
     private int indexCliente;
     String resposta;
+    private Double valorDeposito = 0.0;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -51,14 +53,15 @@ public class ContaOrdem extends ContaBase {
         System.out.println("Insira o NOME do cliente:");
         resposta = stdIn.nextLine();
         contaBD.setColunaTabela("cliente_id");
-        if (contaBD.verificaExistenciaInfo("SELECT * FROM cliente WHERE nome = '" + resposta + "'") == true) {
+        if (contaBD.verificaExistenciaInfo("SELECT cliente_id FROM cliente WHERE nome = '" + resposta + "'") == true) {
             contaBD.setInfo1("conta_id");
             contaBD.setInfo2("tipo_de_conta");
             contaBD.getDados("SELECT cliente.cliente_id, conta.conta_id, conta.tipo_de_conta FROM conta, cliente WHERE cliente.cliente_id = conta.cliente_id AND nome = '" + resposta + "'");
         } else {
             System.out.println("Cliente não encontrado.");
         }
-    }   //FALTA FAZER O VIEW
+        view.Imprimir();
+    }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //Mostra saldo conta Ordem
@@ -68,14 +71,15 @@ public class ContaOrdem extends ContaBase {
         System.out.println("Insira o CODIGO do CARTÃO do cliente:");
         resposta = stdIn.nextLine();
         contaBD.setColunaTabela("cartao_id");
-        if (contaBD.verificaExistenciaInfo("SELECT * FROM cartoes WHERE cartao_id = '" + resposta + "'") == true) {
+        if (contaBD.verificaExistenciaInfo("SELECT cartao_id FROM cartoes WHERE cartao_id = '" + resposta + "'") == true) {
             contaBD.setInfo1("saldo");
             contaBD.setInfo2("");
             contaBD.getDados("SELECT cartoes.cartao_id, conta.conta_id, conta.saldo FROM conta, cartoes WHERE cartoes.conta_id = conta.conta_id and cartoes.conta_id = " + resposta);
         } else {
             System.out.println("Cliente não encontrado.");
         }
-    }  //FALTA FAZER O VIEW
+        view.Imprimir();
+    }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -89,14 +93,20 @@ public class ContaOrdem extends ContaBase {
 
     public void depositoContaOrdem() throws SQLException {
         System.out.println("Insira o CODIGO do CARTÃO do cliente:");
-        resposta = stdIn.nextLine();
+        String respostaID = stdIn.nextLine();
         contaBD.setColunaTabela("cartao_id");
-        if (contaBD.verificaExistenciaInfo("SELECT * FROM cartoes WHERE cartao_id = '" + resposta + "'") == true) {
+        if (contaBD.verificaExistenciaInfo("SELECT cartao_id FROM cartoes WHERE cartao_id = '" + respostaID + "'") == true) { //Verifica se existe cliente
             System.out.println("Qual o valor?");
+            resposta = stdIn.nextLine();
+            valorDeposito = Double.parseDouble(resposta);
+            contaBD.setColunaTabela("saldo");
             contaBD.setInfo1("saldo");
-            contaBD.setInfo2("");
-            contaBD.getDados("SELECT cartoes.cartao_id, conta.conta_id, conta.saldo FROM conta, cartoes WHERE cartoes.conta_id = conta.conta_id and cartoes.conta_id = " + resposta);
-            contaBD.getBD().get(0);
+            contaBD.setInfo2("conta_id");
+            contaBD.getDados("SELECT conta.saldo, conta.conta_id FROM cartoes, conta WHERE conta.conta_id = cartoes.conta_id and cartao_id = '" + respostaID + "'"); //Retorna o saldo e o id da conta
+            valorDeposito = valorDeposito + Double.parseDouble(contaBD.getBD().get(0));
+            int indexConta = Integer.parseInt(contaBD.getBD().get(1));
+            System.out.println("valor soma: € " + (valorDeposito));
+            contaBD.alteraBD("UPDATE conta SET saldo = " + valorDeposito + " WHERE conta_id = " + indexConta); //Faz o update do novo valor na conta
         } else {
             System.out.println("Cliente não encontrado.");
         }
