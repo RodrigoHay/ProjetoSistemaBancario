@@ -36,6 +36,7 @@ public class ContaOrdem extends ContaBase {
     private String valorLevantamento;
     private String valorDeposito;
     private String deposito_levantamento;
+    private boolean okLevantamento = false;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -122,7 +123,7 @@ public class ContaOrdem extends ContaBase {
                 this.valorLevantamento = stdIn.nextLine();
                 LevantaContaOrdem();
             }
-            if (atividade.equals("transferencia")) { 
+            if (atividade.equals("transferencia")) {
                 System.out.println("Insira o NÚMERO DA CONTA onde será CREDITADO:");
                 respostaTransferencia = stdIn.nextLine();
                 fraseQuery = "SELECT conta_id FROM conta WHERE conta_id = '" + respostaTransferencia + "'";
@@ -134,7 +135,10 @@ public class ContaOrdem extends ContaBase {
                     this.valorDeposito = stdIn.nextLine();
                     this.valorLevantamento = this.valorDeposito;
                     LevantaContaOrdem();
-                    DepositoContaOrdem();
+                    if (okLevantamento == true) {
+                        DepositoContaOrdem();
+                    }
+
                 } else {
                     System.out.println("Conta não encontrada.");                        //fazer travar se não tiver saldo
                 }
@@ -172,6 +176,7 @@ public class ContaOrdem extends ContaBase {
             valorL = Double.parseDouble(contaBD.getBD().get(0)) - valorL;
             int indexConta = Integer.parseInt(contaBD.getBD().get(1));
             contaBD.alteraBD("UPDATE conta SET saldo = " + valorL + " WHERE conta_id = " + indexConta); //Faz o update do novo valor na conta
+            okLevantamento = false;
         } else {
             System.out.println("Saldo insuficiente.");
         }
