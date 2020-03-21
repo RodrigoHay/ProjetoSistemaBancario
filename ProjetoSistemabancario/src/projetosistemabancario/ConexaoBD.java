@@ -84,11 +84,9 @@ public class ConexaoBD {
         while (rs.next()) {
             if (!this.info1.equals("")) {
                 bd.add(rs.getString(info1));
-                System.out.println("impressao direta da bd " + bd.get(0));
             }
             if (!this.info2.equals("")) {
                 bd.add(rs.getString(info2));
-                System.out.println("impressao direta da bd " + bd.get(1));
             }
         }
     }
