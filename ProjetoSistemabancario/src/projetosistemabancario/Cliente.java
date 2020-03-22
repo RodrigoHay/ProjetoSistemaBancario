@@ -112,9 +112,7 @@ public class Cliente {
             System.out.println("Dados pessoais completos");
             try {
                 CriarClienteBD();
-//                clienteBD.setColunaTabela("cliente_id");
                 setIndexCliente(clienteBD.getIndex("SELECT * FROM cliente", "cliente_id"));
-//                setIndexCliente(clienteBD.getIndex("SELECT * FROM cliente"));
                 contaOrdem.setIndexCliente(this.getIndexCliente());
                 contaOrdem.setJuros(0.0);
                 contaOrdem.setPeriodo(0);
@@ -147,12 +145,9 @@ public class Cliente {
         System.out.println("Digite o NOME DO CLIENTE:");
         resposta = stdIn.nextLine();
         String fraseQuery = "SELECT * FROM cliente WHERE nome = '" + resposta + "'";
-        //clienteBD.setColunaTabela("cliente_id");
-        
         if (clienteBD.verificaExistenciaInfo(fraseQuery, "cliente_id") == true) {
             fraseQuery = "SELECT * FROM cliente WHERE nome = '" + resposta + "'";
             indexCliente = clienteBD.getIndex(fraseQuery,"cliente_id");
-           // indexCliente = clienteBD.getIndex("SELECT * FROM cliente WHERE nome = '" + resposta + "'");
             //Indica qual informação deseja alterar  
             System.out.println("Qual informação deseja alterar/Corrigir?");
             System.out.println("1 - Nome:");
@@ -216,7 +211,7 @@ public class Cliente {
     public void setNomeCliente(String nomeCliente) { //Verifica se cliente existe / se ok faz o set do nome
         try { 
         String fraseQuery = "SELECT * FROM cliente WHERE nome = '" + nomeCliente + "'";
-            if (clienteBD.verificaExistenciaInfo(fraseQuery, "nome") == false) {
+            if (clienteBD.verificaExistenciaInfo(fraseQuery, "cliente_id") == false) {
                 this.nomeCliente = nomeCliente;
                 step = 2;
             } else {

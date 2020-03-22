@@ -47,20 +47,7 @@ public class ConexaoBD {
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    //Retorna o index da ultima gravação
-
-    public int getIndex(String fraseQuery, String colunaTabela) throws SQLException {
-
-        ResultSet rs = stmt.executeQuery(fraseQuery);
-        int index = 0;
-        while (rs.next()) {
-            index = Integer.parseInt(rs.getString(colunaTabela));
-        }
-        return index;
-    }
-//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // Verifica se um cliente/conta/cartão existe
+// Verifica se um cliente/conta/cartão existe
 
     public boolean verificaExistenciaInfo(String fraseQuery, String colunaTabela) throws SQLException {
         boolean existeCliente = false;
@@ -73,6 +60,19 @@ public class ConexaoBD {
             existeCliente = true;
         }
         return existeCliente;
+    }
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Retorna o index da ultima gravação
+
+    public int getIndex(String fraseQuery, String colunaTabela) throws SQLException {
+
+        ResultSet rs = stmt.executeQuery(fraseQuery);
+        int index = 0;
+        while (rs.next()) {
+            index = Integer.parseInt(rs.getString(colunaTabela));
+        }
+        return index;
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -123,7 +123,6 @@ public class ConexaoBD {
 //    public void setColunaTabela(String colunaTabela) {
 //        this.colunaTabela = colunaTabela;
 //    }
-
     public String getInfo1() {
         return info1;
     }

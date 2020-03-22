@@ -14,7 +14,6 @@ package projetosistemabancario;
 import java.util.Scanner;
 
 /**
- *
  * @author Rodrigo Hay
  */
 public class ProjetoSistemabancario {
@@ -23,8 +22,10 @@ public class ProjetoSistemabancario {
         String resposta = "";
         Cliente cliente = new Cliente();
         ContaOrdem contaOrdem = new ContaOrdem();
+        ContaPoupanca contaPoupanca = new ContaPoupanca();
         Scanner stdIn = new Scanner(System.in);
-        System.out.println("Inserir opção 1-criar, 2-alterar, 3-Listar conta Ordem, 4-Saldo conta Ordem, 5-Deposito, 6-Levantamento, 7-Transferencia conta Ordem 0-cancelar");
+        System.out.println("Inserir opção 1-criar, 2-alterar, 3-Listar conta Ordem, 4-Saldo conta Ordem, 5-Deposito conta Ordem");
+        System.out.println("6-Levantamento, 7-Transferencia, 8-Criar conta Poupança - 0-cancelar");
         resposta = stdIn.nextLine();
         try {
             switch (resposta) {
@@ -59,6 +60,10 @@ public class ProjetoSistemabancario {
                 case "7":
                     System.out.println("Transferência da conta Ordem.");
                     contaOrdem.Atividade("transferencia");
+                    break;
+                case "8":
+                    System.out.println("Cria conta POUPANÇA.");
+                    contaPoupanca.CriarConta();
                     break;
                 default:
                     System.out.println("Opção incorreta.");
