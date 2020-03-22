@@ -176,7 +176,7 @@ public class ContaOrdem extends ContaBase {
             valorL = Double.parseDouble(contaBD.getBD().get(0)) - valorL;
             int indexConta = Integer.parseInt(contaBD.getBD().get(1));
             contaBD.alteraBD("UPDATE conta SET saldo = " + valorL + " WHERE conta_id = " + indexConta); //Faz o update do novo valor na conta
-            okLevantamento = false;
+            okLevantamento = true;
         } else {
             System.out.println("Saldo insuficiente.");
         }
